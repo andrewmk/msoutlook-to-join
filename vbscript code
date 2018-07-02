@@ -1,0 +1,47 @@
+Dim WithEvents myolapp As Outlook.Application
+Private Sub Application_Startup()
+    MsgBox "Welcome, " & Application.GetNamespace("MAPI").CurrentUser
+    Initialize_reminder_handler
+End Sub
+Sub Initialize_reminder_handler()
+    Set myolapp = Outlook.Application
+End Sub
+Private Sub myolapp_Reminder(ByVal Item As Object)
+    SendToJoinAPI Item
+End Sub
+Private Sub SendToJoinAPI(ByVal Item As Object)
+
+    Dim myLocation As String
+    Dim myStart As String
+    Dim mySubject As String
+    Dim myURL As String
+    
+    If Item.Class = olAppointment Then
+                
+        myStart = Item.Start
+        mySubject = Item.Subject
+        myLocation = ""
+        
+        If Item.Location <> "" Then
+            myLocation = " in " & Item.Location
+        End If
+        
+        'MsgBox myLocation
+           
+        myURL = "https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush?text=You%20have%20a%20meeting" & _
+                  myLocation & "%20at%20" & _
+                  myStart & _
+                  "&title=" & mySubject & _
+                  "&deviceId=aaabbbccc&apikey=dddeeefff"
+                  
+        With CreateObject("MSXML2.XMLHTTP")
+            .Open "GET", myURL, False
+            .Send
+            
+        End With
+    End If
+End Sub
+
+
+
+
