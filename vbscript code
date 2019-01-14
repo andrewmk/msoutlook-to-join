@@ -32,7 +32,7 @@ Private Sub SendToJoinAPI(ByVal Item As Object)
                   myLocation & "%20at%20" & _
                   myStart & _
                   "&title=" & mySubject & _
-                  "&deviceId=aaabbbccc&apikey=dddeeefff"
+                  "&deviceNames=aaabbbccc&apikey=dddeeefff"
                   
         With CreateObject("MSXML2.XMLHTTP")
             .Open "GET", myURL, False
